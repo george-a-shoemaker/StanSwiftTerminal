@@ -15,18 +15,20 @@ cookieJarA.insert(cookie: Cookie(flavor: .chocolateChip))
 cookieJarA.insert(cookie: Cookie(flavor: .stroopwafel))
 cookieJarA.insert(cookie: Cookie(flavor: .chocolateChip))
 cookieJarA.insert(cookie: Cookie(flavor: .fortune))
+
 print( "cookieJarA Contents: \(cookieJarA.emojis())" )
 print("\nLet's move a cookie from cookieJarA to cookieJarB")
 let cookieJarB = CookieJar()
-while cookieJarA.quantity() > 0 {
+while !cookieJarA.isEmpty { // while the cookieJarA is **not empty
     cookieJarB.insert(
         cookie: cookieJarA.remove()!
         // ! means force unwrap the result of .remove()
+        // I'm making a promise to the compiler that .remove() will return a value
     )
 }
 print( "cookieJarA Contents: \(cookieJarA.emojis())" )
 print( "cookieJarB Contents: \(cookieJarB.emojis())" )
-print (cookieJarA.quantity())
+print (cookieJarA.count)
 
 //insertRemoveExample()
 
@@ -40,7 +42,7 @@ func insertRemoveExample() {
     cookieJarA.insert(cookie: Cookie(flavor: .fortune))
     cookieJarA.insert(cookie: Cookie(flavor: .stroopwafel))
     
-    print("cookieJarA has \(cookieJarA.quantity()) cookies!")
+    print("cookieJarA has \(cookieJarA.count) cookies!")
     print(cookieJarA.emojis())
     
     let cookieJarB : CookieBagProtocol = CookieJar()
@@ -49,6 +51,6 @@ func insertRemoveExample() {
     print("\ncookieJarB received a cookie from cookieJarA")
     print(cookieJarB.emojis())
     
-    print("cookieJarA now has \(cookieJarA.quantity()) cookies!")
+    print("cookieJarA now has \(cookieJarA.count) cookies!")
     print(cookieJarA.emojis())
 }

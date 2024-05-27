@@ -18,26 +18,27 @@
 
 import Foundation // for using UUID
 
-// A there are strictly 3 cookie flavors
+// There are strictly 3 cookie flavors
 // Top help enforce this, I’ve captured the flavors as an enum named “CookieFlavor”
 // For convenience I add an “emoji” property
 // which maps a CookieFlavor to an emoji Character
-public enum CookieFlavor {
+enum CookieFlavor {
     
     case chocolateChip, fortune, stroopwafel
+    
     var description : String {
         switch self {
-            case .chocolateChip: return "Chocolate Chip"
-            case .fortune: return "Fortune"
-            case .stroopwafel: return "Stroopwafel"
+        case .chocolateChip: return "Chocolate Chip"
+        case .fortune: return "Fortune"
+        case .stroopwafel: return "Stroopwafel"
         }
     }
     
     var emoji : Character {
         switch self {
-            case .chocolateChip: return "🍪"
-            case .fortune: return "🥠"
-            case .stroopwafel: return "🧇"
+        case .chocolateChip: return "🍪"
+        case .fortune: return "🥠"
+        case .stroopwafel: return "🧇"
         }
     }
 }
@@ -46,42 +47,46 @@ public enum CookieFlavor {
 // Why did I make Cookie Hashable?
 // So that the underlying data strucutre I chose, a Set,
 // can differentiate between individual cookies —— they all have unique IDs
-public struct Cookie : Hashable {
-    public init(flavor: CookieFlavor) {
-        self.flavor = flavor
-    }
-    
+struct Cookie : Hashable {
     let flavor : CookieFlavor
     var description : String { "\(flavor.description) Cookie" }
     private let id: UUID = UUID()
-    
 }
 
 // A protocol defines just the func signatures / variables of a type, but NOT the implementation
 // You can set the type of a vairable as a protocol, and then define the variable as an implmentation
 // For example: let someProtocolInstance: CookieBageProtocol = CookieJar()
-public protocol CookieBagProtocol {
-    func quantity() -> Int
+protocol CookieBagProtocol {
+    var count : Int { get }
+    var isEmpty : Bool { get }
     func insert(cookie: Cookie)
     func remove() -> Cookie?
     func emojis() -> String
 }
+
+
+// .count is STATE
+
 // This class CookieJar "conforms" to the CookieBagProtocol
-public class CookieJar : CookieBagProtocol {
-    
+class CookieJar : CookieBagProtocol {
+        
     public init() {}
     
-    private var cookies = Set<Cookie>()
+    private var cookies = Set<Cookie>() // Set (a data type) containing instances of Cookie
     
-    public func quantity() -> Int {
+    var count: Int { // computed property
         return cookies.count
     }
     
+    var isEmpty : Bool {return cookies.count == 0}
+    
     public func insert(cookie: Cookie) {
         cookies.insert(cookie)
+        // I expect the STATE to change
     }
     
-    public func remove() -> Cookie? {
+    public func remove() -> Cookie? { // Returns a Cookie or nil if the jar is empty
+        if cookies.isEmpty { return nil }
         return cookies.removeFirst()
     }
     
